@@ -16,6 +16,7 @@ export class TrainingService {
   ];
 
   private runningExercise: Excercise;
+  private excercises: Excercise[] = [];
 
   constructor() { }
 
@@ -26,6 +27,28 @@ export class TrainingService {
   startExercise(selectedId: string) {
     this.runningExercise = this.availableExcercises.find(ex => ex.id === selectedId);
     this.excerciseChanged.next({...this.runningExercise});
+  }
+
+  completeExcercise() {
+    this.excercises.push({
+      ...this.runningExercise, 
+      date: new Date(), 
+      state: 'completed'
+    });
+    this.runningExercise = null;
+    this.excerciseChanged.next(null);
+  }
+
+  cancelExcercise(progress: number) {
+    this.excercises.push({
+      ...this.runningExercise, 
+      duration: this.runningExercise.duration * (progress / 100), 
+      calories: this.runningExercise.duration * (progress / 100), 
+      date: new Date(), 
+      state: 'cancelled'
+    });
+    this.runningExercise = null;
+    this.excerciseChanged.next(null);
   }
 
   getRunningExercise() {
