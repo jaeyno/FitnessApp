@@ -12,9 +12,15 @@ export class TrainingService {
     { id: 'burpee', name: 'Burpee', duration: 60, calories: 80}
   ];
 
+  private runningExercise: Excercise;
+
   constructor() { }
 
   getAvailableExcerices() {
     return this.availableExcercises.slice();
+  }
+
+  startExerCise(selectedId: string) {
+    this.runningExercise = this.availableExcercises.find(ex => ex.id === selectedId);
   }
 }
