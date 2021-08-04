@@ -40,7 +40,7 @@ export class TrainingService {
   }
 
   completeExcercise() {
-    this.excercises.push({
+    this.addDataToDatabase({
       ...this.runningExercise, 
       date: new Date(), 
       state: 'completed'
@@ -50,7 +50,7 @@ export class TrainingService {
   }
 
   cancelExcercise(progress: number) {
-    this.excercises.push({
+    this.addDataToDatabase({
       ...this.runningExercise, 
       duration: this.runningExercise.duration * (progress / 100), 
       calories: this.runningExercise.duration * (progress / 100), 
@@ -67,5 +67,9 @@ export class TrainingService {
 
   getCompletedOrCancelledExcercises() {
     return this.excercises.slice();
+  }
+
+  private addDataToDatabase(excercise: Excercise) {
+    this.firestore.collection('finishedExcercises').add(excercise);
   }
 }
