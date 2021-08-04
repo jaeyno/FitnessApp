@@ -4,6 +4,7 @@ import { Excercise } from '../model/excercise.model';
 import { TrainingService } from '../training.service';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-new-training',
@@ -20,7 +21,16 @@ export class NewTrainingComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.excercises$ = this.firestore.collection('availableExcercise').valueChanges()
+    this.excercises$ = this.firestore.collection('availableExcercise').snapshotChanges()
+      .pipe(map(docArray => {
+        return docArray.map(doc => {
+          return {
+            name: doc.payload.doc.data()['name'],
+            duration: doc.payload.doc.data()['duration'],
+            calories: doc.payload.doc.data()['calories']
+          }
+        })
+      }))
   }
 
   onStartTraining(form: NgForm) {
