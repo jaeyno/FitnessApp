@@ -1,4 +1,3 @@
-import { TrainingModule } from './training/training.module';
 import { AuthModule } from './auth/auth.module';
 import { MaterialModule } from './material.module';
 import { NgModule } from '@angular/core';
@@ -12,6 +11,7 @@ import { HeaderComponent } from './navigation/header/header.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
 import { AngularFireModule } from 'angularfire2';
 import { environment } from 'src/environments/environment';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
 
 @NgModule({
   declarations: [
@@ -27,8 +27,8 @@ import { environment } from 'src/environments/environment';
     MaterialModule,
     FlexLayoutModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     AuthModule,
-    TrainingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
