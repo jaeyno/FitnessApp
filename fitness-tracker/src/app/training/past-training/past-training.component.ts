@@ -13,7 +13,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  private subscription: Subscription = new Subscription();
+  private subscription: Subscription[] = [];
 
   displayedColumns = ['date', 'name', 'duration', 'calories', 'state'];
   dataSource = new MatTableDataSource<Excercise>();
@@ -26,7 +26,7 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.trainingService.fetchCompletedOrCancelledExcercises();
     
-    this.subscription.add(this.trainingService.finishedExcercisesChanged.subscribe((excercises: Excercise[]) => {
+    this.subscription.push(this.trainingService.finishedExcercisesChanged.subscribe((excercises: Excercise[]) => {
       console.log(excercises)
       this.dataSource.data = excercises;
     }));
@@ -38,7 +38,9 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.forEach(sub => sub.unsubscribe());
+    }
   }
 
   doFilter(filterValue: string) {
