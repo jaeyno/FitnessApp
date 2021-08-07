@@ -1,3 +1,4 @@
+import { UiService } from './../shared/ui.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Subject, Subscription } from 'rxjs';
@@ -18,9 +19,13 @@ export class TrainingService {
   private availableExcercises: Excercise[] = [];
   private runningExercise: Excercise;
 
-  constructor(private firestore: AngularFirestore) { }
+  constructor(
+    private firestore: AngularFirestore,
+    private uiService: UiService
+  ) { }
 
   fetchAvailableExercises() {
+    this.uiService.loadingStateChanged.next(true);
     this.subscription.push(this.firestore.collection('availableExcercise').snapshotChanges()
       .pipe(map(docArray => {
         return docArray.map(doc => {
@@ -31,6 +36,7 @@ export class TrainingService {
           }
         })
       })).subscribe((excercises: Excercise[]) => {
+        this.uiService.loadingStateChanged.next(false);
         this.availableExcercises = excercises;
         this.excercisesChanged.next([...this.availableExcercises]);
       }, error => {
