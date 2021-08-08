@@ -12,6 +12,8 @@ import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.com
 import { AngularFireModule } from 'angularfire2';
 import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AuthModule,
+    StoreModule.forRoot({ui: appReducer}),
   ],
   providers: [],
   bootstrap: [AppComponent]
