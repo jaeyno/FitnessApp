@@ -5,7 +5,7 @@ import { AuthService } from './../auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import * as fromApp from '../../app.reducer';
+import * as fromRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-login',
@@ -21,11 +21,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private uiService: UiService,
-    private store: Store<{ui: fromApp.State}>
+    private store: Store<fromRoot.State>
   ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = this.store.pipe(map(state => state.ui.isLoading))
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
 
     // this.subscription.push(this.uiService.loadingStateChanged.subscribe(isLoading => {
     //   this.isLoading = isLoading;
