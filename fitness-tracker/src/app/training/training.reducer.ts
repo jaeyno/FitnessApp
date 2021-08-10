@@ -6,7 +6,7 @@ import * as fromRoot from '../app.reducer';
 export interface TrainingState {
     availableExcercises: Excercise[];
     finishedExcercises: Excercise[];
-    activeExcercises: Excercise[];
+    activeExcercises: Excercise;
 };
 
 export interface State extends fromRoot.State {
