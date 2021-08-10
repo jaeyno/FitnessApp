@@ -21,13 +21,11 @@ export class SetFinishedTrainings implements Action {
 export class StartTraining implements Action {
     readonly type = START_TRAINING;
 
-    constructor(public payload: Excercise) { }
+    constructor(public payload: string) { }
 }
 
-export class StoptTraining implements Action {
+export class StopTraining implements Action {
     readonly type = STOP_TRAINING;
-
-    constructor(public payload: Excercise) { }
 }
 
-export type TrainingActions = SetAvailableTrainings | SetFinishedTrainings | StartTraining| StoptTraining;
+export type TrainingActions = SetAvailableTrainings | SetFinishedTrainings | StartTraining| StopTraining;
