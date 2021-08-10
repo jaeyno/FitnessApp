@@ -8,6 +8,7 @@ import { UiService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
+import * as Auth from './auth.actions';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthService {
 
   authChange = new Subject<boolean>();
 
-  private isAuthenticated: boolean = false;
+  //private isAuthenticated: boolean = false;
 
   constructor(
     private router: Router,
@@ -29,13 +30,15 @@ export class AuthService {
   initAuthListener() {
     this.authFire.authState.subscribe(user => {
       if (user) {
-        this.isAuthenticated = true;
-        this.authChange.next(true);
+        this.store.dispatch(new Auth.SetAuthenticated());
+        // this.isAuthenticated = true;
+        // this.authChange.next(true);
         this.router.navigate(['/training'])
       } else {
         this.trainingService.cancelSubscriptions();
-        this.isAuthenticated = false;
-        this.authChange.next(false);
+        this.store.dispatch(new Auth.SetUnauthenticated());
+        // this.isAuthenticated = false;
+        // this.authChange.next(false);
         this.router.navigate(['/login'])
       }
     })
@@ -43,29 +46,29 @@ export class AuthService {
 
   registerUser(authData: AuthData) {
     // this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch(new UI.StartLoading);
+    this.store.dispatch(new UI.StartLoading());
     this.authFire.auth.createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
         //this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading);
+        this.store.dispatch(new UI.StopLoading());
       }).catch(error => {
         //this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading);
+        this.store.dispatch(new UI.StopLoading());
         this.uiService.showSnackbar(error.message, null, 3000);
       })
   }
 
   login(authData: AuthData) {
     //this.uiService.loadingStateChanged.next(true);
-    this.store.dispatch(new UI.StartLoading);
+    this.store.dispatch(new UI.StartLoading());
     this.authFire.auth.signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
         //this.uiService.loadingStateChanged.next(false);
-        this.store.dispatch(new UI.StopLoading);
+        this.store.dispatch(new UI.StopLoading());
       }).catch(error => {
         //this.uiService.loadingStateChanged.next(false);
         this.uiService.showSnackbar(error.message, null, 3000);
-        this.store.dispatch(new UI.StopLoading);
+        this.store.dispatch(new UI.StopLoading());
       })
   }
 
@@ -73,7 +76,7 @@ export class AuthService {
     this.authFire.auth.signOut();
   }
 
-  isAuth() {
-    return this.isAuthenticated;
-  }
+  // isAuth() {
+  //   return this.isAuthenticated;
+  // }
 }
