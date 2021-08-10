@@ -1,6 +1,4 @@
-import { reducers } from './../../app.reducer';
 import { Store } from '@ngrx/store';
-import { UiService } from './../../shared/ui.service';
 import { NgForm } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Excercise } from '../model/excercise.model';
@@ -22,23 +20,13 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
 
   constructor( 
     private trainingService: TrainingService,
-    private uiService: UiService,
     private store: Store<fromTraining.State>
   ) { }
 
   ngOnInit(): void {
     this.fetchExcercises();
-
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-
-    // this.subscription.push(this.uiService.loadingStateChanged.subscribe(isLoading => {
-    //   this.isLoading = isLoading;
-    // }))
-
     this.excercises$ = this.store.select(fromTraining.getAvailableExcercises);
-    // this.subscription.push(this.trainingService.excercisesChanged.subscribe(excercise => {
-    //   this.excercises = excercise;
-    // }));
   }
 
   ngOnDestroy(): void {

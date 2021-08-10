@@ -20,9 +20,6 @@ export class TrainingService {
   excercisesChanged = new Subject<Excercise[]>();
   finishedExcercisesChanged = new Subject<Excercise[]>();
 
-  private availableExcercises: Excercise[] = [];
-  private runningExercise: Excercise;
-
   constructor(
     private firestore: AngularFirestore,
     private uiService: UiService,
@@ -31,7 +28,6 @@ export class TrainingService {
 
   fetchAvailableExercises() {
     this.store.dispatch(new UI.StartLoading());
-    //this.uiService.loadingStateChanged.next(true);
     this.subscription.push(this.firestore.collection('availableExcercise').snapshotChanges()
       .pipe(map(docArray => {
         return docArray.map(doc => {
@@ -43,13 +39,9 @@ export class TrainingService {
         })
       })).subscribe((excercises: Excercise[]) => {
         this.store.dispatch(new UI.StopLoading());
-        //this.uiService.loadingStateChanged.next(false);
         this.store.dispatch(new Training.SetAvailableTrainings(excercises));
-        // this.availableExcercises = excercises;
-        // this.excercisesChanged.next([...this.availableExcercises]);
       }, error => {
         this.store.dispatch(new UI.StopLoading());
-        //this.uiService.loadingStateChanged.next(false);
         this.uiService.showSnackbar('Fetching Excercises failed, please try again later', null, 3000);
         this.excercisesChanged.next(null);
       }))
@@ -57,8 +49,6 @@ export class TrainingService {
 
   startExercise(selectedName: string) {
     this.store.dispatch(new Training.StartTraining(selectedName));
-    // this.runningExercise = this.availableExcercises.find(ex => ex.name === selectedName);
-    // this.excerciseChanged.next({...this.runningExercise});
   }
 
   completeExcercise() {
@@ -70,8 +60,6 @@ export class TrainingService {
       });
     })
     this.store.dispatch(new Training.StopTraining());
-    // this.runningExercise = null;
-    // this.excerciseChanged.next(null);
   }
 
   cancelExcercise(progress: number) {
@@ -85,14 +73,11 @@ export class TrainingService {
       });
     })
     this.store.dispatch(new Training.StopTraining());
-    // this.runningExercise = null;
-    // this.excerciseChanged.next(null);
   }
 
   fetchCompletedOrCancelledExcercises() {
     this.subscription.push(this.firestore.collection('finishedExcercises').valueChanges().subscribe((excercises: Excercise[]) => {
       this.store.dispatch(new Training.SetFinishedTrainings(excercises));
-      //this.finishedExcercisesChanged.next(excercises);
     }, error => {
       console.log(error);
     }))
