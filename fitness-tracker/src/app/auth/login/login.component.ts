@@ -1,6 +1,4 @@
-import { map } from 'rxjs/operators';
 import { Subscription, Observable } from 'rxjs';
-import { UiService } from './../../shared/ui.service';
 import { AuthService } from './../auth.service';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -20,17 +18,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private uiService: UiService,
     private store: Store<fromRoot.State>
   ) { }
 
   ngOnInit(): void {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-
-    // this.subscription.push(this.uiService.loadingStateChanged.subscribe(isLoading => {
-    //   this.isLoading = isLoading;
-    // }))
-
     this.loginForm = new FormGroup({ 
       email: new FormControl('', { validators: [Validators.required, Validators.email] }),
       password: new FormControl('', { validators: [Validators.required] })

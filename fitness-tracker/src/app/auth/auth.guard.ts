@@ -19,20 +19,10 @@ export class AuthGuard implements CanActivate, CanLoad {
 
   canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
     return this.store.select(fromRoot.getIsAuth).pipe(take(1));
-    // if (this.authService.isAuth()) {
-    //   return true;
-    // } else {
-    //   this.router.navigate(['/login']);
-    // }
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.store.select(fromRoot.getIsAuth).pipe(take(1));
-    // if (this.authService.isAuth()) {
-    //   return true;
-    // } else {
-    //   this.router.navigate(['/login']);
-    // }
   }
   
 }
